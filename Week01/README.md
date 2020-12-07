@@ -5,7 +5,7 @@
   - document.createElement
   - 添加事件 (addEventListener)
   
-1. 需要补课
+2. 需要补课
   - let 和 var
   - array
   - css 一些基本设置
