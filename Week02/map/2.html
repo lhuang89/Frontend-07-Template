@@ -61,7 +61,7 @@
          function insert(x, y){
              if (x < 0 || x >=100 || y < 0 || y >= 100)
                  return ;
-             if(map[y * 100 *x])
+             if(map[y * 100 + x])
                  return ;
 
             map[y * 100 + 2] = 2
@@ -71,6 +71,7 @@
 
          while(queue.length){
              let [x, y] = queue.shift();
+             console.log(x, y);
              if (x===end[0] && y ===end[1]){
                  return true;
              }
