@@ -85,7 +85,7 @@ class ResponseParser {
     }
 
     get response(){
-        this.statusLine.match(/HTTP\/1.1 ([0-9+]) ([\s \S]+))/);
+        this.statusLine.match(/HTTP\/1.1 ([0-9]+) ([\s\S]+)/);
         return {
             statusCode: RegExp.$1,
             statusText: RegExp.$2,
@@ -174,7 +174,11 @@ class TrunkedBodyParser {
                 this.length *=16;
                 this.length += parseInt(char, 16);
             } 
-        } else if(this.current === this.READING_TRUNK){
+        } else if (this.current === this.WAITING_LENGTH_LINE_END) {
+            if(char==='\n')
+                this.current = this.READING_TRUNK;
+        }else if(this.current === this.READING_TRUNK){
+            
             this.content.push(char);
             this.length--;
             if (this.length===0){
