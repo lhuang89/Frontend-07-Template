@@ -32,57 +32,59 @@
     例2. 在字符串中寻找"abcabx"
     ```
     function match(string){
-   let state = start;
-   for (let s in string){
-       state = state(s);     
-   }
-   return state===end;
-}
+        let state = start;
+        for (let s in string){
+            state = state(s);     
+        }
+        return state===end;
+    }
 
-function start(s){
-    if (s==='a')
-        return foundA1;
-    else
-        return start(s);
-}
+    function start(s){
+        if (s==='a')
+            return foundA1;
+        else
+            return start(s);
+    }
 
-function foundA1(s){
-    if (s==='b')
-        return foundB1;
-    else
-      return start(s);
-}
+    function foundA1(s){
+        if (s==='b')
+            return foundB1;
+        else
+            return start(s);
+    }
 
-function foundB1(s){
-    if (s==='c')
-        return foundC;
-    else
-      return start(s);
-}
+    function foundB1(s){
+        if (s==='c')
+            return foundC;
+        else
+            return start(s);
+    }
 
-function foundC(s){
-    if (s==='a')
-        return foundB2;
-    else
-      return start(s);
-}
+    function foundC(s){
+        if (s==='a')
+            return foundB2;
+        else
+            return start(s);
+    }
 
-function foundB2(s){
-    if (s==='b')
-        return foundX;
-    else
-      return start(s);
-}
-function foundX(s){
-    if (s==='x')
+    function foundB2(s){
+        if (s==='b')
+            return foundX;
+        else
+            return start(s);
+    }
+
+    function foundX(s){
+        if (s==='x')
+            return end;
+        else
+        return foundB1(s);
+    }
+
+    function end(s){
         return end;
-    else
-      return foundB1(s);
-}
-
-function end(s){
-    return end;
-}
+    }
+    
     ```
 
 3. 实战-使用状态机解析HTTP request 和 HTTP response
