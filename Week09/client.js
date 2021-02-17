@@ -190,7 +190,7 @@ class TrunkedBodyParser {
                 this.current = this.WAITING_NEW_LINE_END;
         } else if(this.current === this.WAITING_NEW_LINE_END){
             if(char==='\n')
-                this.current = this.WAITING_LENGTH
+                this.current = this.WAITING_LENGTH;
         }
     }
 }
@@ -212,4 +212,5 @@ void async function(){
     let response = await request.send();
 
     let dom = parser.parseHTML(response.body);
+
 }();
