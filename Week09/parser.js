@@ -1,10 +1,57 @@
 const EOF = Symbol("EOF");
+const { match } = require('assert');
+const css = require('css');
 
 let currentToken = null;
 let currentAttribute = null;
 
 let stack=[{type:"document", children:[]}];
 let currentTextNode = null;
+
+let rules=[];
+
+function addCSSRules(text){
+    var ast = css.parse(text);
+    console.log(JSON.stringify(ast, null,  "    "));
+    rules.push(...ast.stylesheet.rules);
+}
+
+function match(element, selector){
+
+}
+
+function computeCSS(element){
+    var elements = stack.slice().reverse();
+
+    if (!element.computedStyle){
+        element.computedStyle = {};
+    }
+
+    for (let rule of rules){
+        var selectorParts = rule.selectors[0].split(" ").reverse();
+
+        if(!match(element, selectorParts[0]){
+            continue;
+        }
+
+        let matched = false;
+
+        var j=1;
+
+        for (var i=0; i < elements.length; i++){
+            if(match(elements[i], selectorParts[j])){
+                j++;
+            }
+        }
+
+        if(j >= selectorParts.length)
+            matched = true;
+
+        if(matched){
+            console.log("Element", element , "matched rule", rule);
+        }
+    }
+}
 
 
 function emit(token){
@@ -28,6 +75,8 @@ function emit(token){
                 });
         }
 
+        computeCSS(element);
+
         top.children.push(element);
         element.parent = top;
 
@@ -40,6 +89,11 @@ function emit(token){
         if(top.tagName != token.tagName){
             throw new Error("Start tag and end tag don't match!");
         } else {
+
+            if (top.tagName==="style"){
+                addCSSRules(top.children[0].content);
+            }
+
             stack.pop();
         }
         currentTextNode = null;
