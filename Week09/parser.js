@@ -1,5 +1,4 @@
 const EOF = Symbol("EOF");
-const { match } = require('assert');
 const css = require('css');
 
 let currentToken = null;
@@ -17,6 +16,24 @@ function addCSSRules(text){
 }
 
 function match(element, selector){
+    if(!selector || !element.attributes)
+        return false;
+
+    if(selector.charAt(0) == "#"){
+        var attr = element.attributes.filter(attr => attr.name==="id")[0]
+            if(attr && attr.value === selector.replace("#", ''))
+                return true;
+    } else if(selector.charAt(0) == "."){
+        var attr = element.attributes.filter(attr => attr.name==="class")[0]
+            if(attr && attr.value === selector.replace(".", ''))
+                return true;
+    } else {
+        if(element.tagName === selector){
+            return true;
+        }
+    }
+
+    return false;
 
 }
 
@@ -30,7 +47,7 @@ function computeCSS(element){
     for (let rule of rules){
         var selectorParts = rule.selectors[0].split(" ").reverse();
 
-        if(!match(element, selectorParts[0]){
+        if(!match(element, selectorParts[0])){
             continue;
         }
 
