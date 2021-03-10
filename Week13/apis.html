@@ -66,5 +66,13 @@
         names = names.filter(e=>!interfaces.has(e));
     }
 
+    //https://streams.spec.whatwg.org/#blqs-class
+
+    names = filterOut(names, ["ReadableStream", "ReadableStreamDefaultReader", "ReadableStreamBYOBReader", "ReadableStreamDefaultController", "ReadableByteStreamController", "ReadableStreamBYOBRequest", "WritableStream", "WritableStreamDefaultWriter", "WritableStreamDefaultController", "TransformStream", "TransformStreamDefaultController", "ByteLengthQueuingStrategy", "CountQueuingStrategy"]);
+
+    //https://encoding.spec.whatwg.org/#dom-textencoder
+
+    names = filterOut(names, ["TextDecoder", "TextEncoder", "TextDecoderStream", "TextEncoderStream"]);
+
     console.log(names);
 </script>
