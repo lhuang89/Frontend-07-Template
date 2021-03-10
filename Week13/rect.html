@@ -1,0 +1,12 @@
+<style>
+    .x::before{
+        content:"extra extra extra extra extra";
+        background-color: pink;
+    }
+</style>
+<div style="width:100px;height:400px;overflow:scroll">
+    TEXT <span class="x" style="background-color: lightblue;">TEXT TEXT TEXT TEXT TEXT TEXT TEXT</span>
+</div>
+<script>
+    var x=document.getElementsByClassName("x")[0];
+</script>

@@ -70,7 +70,7 @@
 - isSameNode (equivalent to "===")
 - cloneNode (deep copy if set parameter to true)
 
-## 5. Browser API | Event API
+## 5. Browser API | DOM API | Event API
 ### 5.1 addEventLister
 - target.addEventListener(type, listener, [, options])
     - options: capture (capture/bubbling)
@@ -87,7 +87,7 @@
     ```
     - options: once
     - options: passive
-## 6. Browser API | Range API
+## 6. Browser API | DOM API | Range API
 ### 6.1 Create a range
 ```javaScript
 var range = new Range()
@@ -108,5 +108,73 @@ range.insertnode(document.createTextNode("aaaa"))
 ```
 
 ## 7. Browser API | CSSOM
+- DOM API - Abstraction of HTML
+- CSSOM - Abstraction of CSS
+### 7.1 Rules
+```javaScript
+document.styleSheets[0].cssRules
+document.styleSheets[0].insertRule("p {color:pink;}", 0) //parameters: rule, position
+document.styleSheets[0].removeRule(0)
+```
+Pseudo elements sytles have to be changed through CSSOM
+e.g.
+```html
+<style title="Hello">
+    a::before{
+        color:red;
+        content:"Hello"
+    }
+</style>
+<link rel="stylesheet" title="x" href="data:text/css,p%7Bcolor:blue%7D"/>
+<a> world</a>
+```
+We can change the "before" pseudo element color to green
+```javaScript
+document.styleSheets[0].cssRules[0].style.color = "lightgreen"
+```
+### 7.2 getComputedStyle
+```javaScript
+window.getComputedStyle(elt, pseudoElt)
+```
+- elt - elements we want 
+- pseudoElt - pseudo element (optional)
+
+e.g.
+```javaScript
+getComputedStyle(document.querySelector("a")); //element
+getComputedStyle(document.querySelector("a"), "::before") //pseudo element
+getComputedStyle(document.querySelector("a"), "::before").color //access property of pseudo element
+```
 ## 8. Browser API | CSSOM View
+- Get properties after rendering
+### 8.1 Window API
+- window.innerHeight, window.innerWidth
+- window.outerHeight, window.outerHeight 
+- window.devicePixelRatio (DPR. Normal: 1:1 Retina Screen: 1:2)
+- window.screen
+    -window.screen.width
+    -window.screen.height
+    -window.screen.availWidth
+    -window.screen.availHeight
+-window.open
+-window.moveTo(x,y)
+-window.moveBy(x,y)
+-window.resizeTo(x,y)
+-window.resizeBy(x,y)
+-scroll
+-window.scroll
+-layout
+    -getClientRects()
+    -getBoundingClentRect()
 ## 9. Browser API | Other APIs
+### 9.1 Standards
+- khronos
+    - WebGL
+- ECMA
+    - ECMAScript
+- WHATWG
+    - HTML
+- W3C
+    - webaudio
+    - CG/WG
+
