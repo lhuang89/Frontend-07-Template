@@ -77,4 +77,5 @@ input.getAttribute('value'); //cute
     <li><img src="{{icon}}"/>{{title}}</li>
 </my-list>
 ```
+# JSX
 
