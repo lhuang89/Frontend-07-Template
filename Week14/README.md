@@ -77,5 +77,97 @@ input.getAttribute('value'); //cute
     <li><img src="{{icon}}"/>{{title}}</li>
 </my-list>
 ```
-# JSX
+
+## Setting up environment for JSX
+
+- Install webpack and babel-loader
+
+```sh
+# create a folder for your jsx project, e.g Week14/jsx
+# in your jsx folder, e.g. Week14/jsx
+
+# 1. cd into the folder, and create npm 
+npm init
+# 2. install webpack globally
+npm install -g webpack webpack-cli
+
+# after installed, we can check the version of webpack using 'webpack --version'
+
+# 3. install babel series locally using --save-dev
+npm install --save-dev webpack babel-loader
+```
+- Create configuration file webpack.config.js, after this you can create the js file specified in 'entry' to test (main.js in this example)
+```js
+module.exports = {
+    entry: "./main.js",
+}
+
+```
+- keep installing babel
+```sh
+# 4. install babel core and babel preset-env
+npm install --savedev @babel/core @babel/preset-env
+```
+
+- add rules to webpack.config.js
+
+```js
+// this is how webpack.config.js look like up to this step, we also added 'mode: "development"', it can be changed to "production" later
+// in develepment mode the translated js file will have line breaks
+module.exports = {
+    entry: "./main.js",
+    module: {
+        rules: [{
+            test: /\.js$/,
+            use: {
+                loader: "babel-loader",
+                options: {
+                    presets: ["@babel/preset-env"]
+                }
+            }
+        }]
+    },
+    mode: "development"
+}
+```
+- In order to correctly parse html markups in js, e.g (let a=<div/>), we need to install another babel package
+```sh
+npm install --save-dev @babel/plugin-transform-react-jsx
+```
+- We need to add this package to our configuration
+```js
+module.exports = {
+    entry: "./main.js",
+    module: {
+        rules: [{
+            test: /\.js$/,
+            use: {
+                loader: "babel-loader",
+                options: {
+                    presets: ["@babel/preset-env"],
+                    plugins: ["@babel/plugin-transform-react-jsx"]
+                }
+            }
+        }]
+    },
+    mode: "development"
+}
+```
+- To test our results in browser we can also install webpack-dev-server
+```sh
+npm install webpack-dev-server --save-dev
+npm install --save-dev webpack-cli
+# note that if you install the server locally, you have to run in node_modules/.bin/
+# or you can add the following to package.json then use 'npm start' to run
+# "'scripts': {
+#    'start' : 'webpack-dev-server'
+# }
+
+# WARNING: webpack-cli version 4.x conflicts with webpack-dev-server 3.x. 
+# you will get an error "Cannot find module 'webpack-cli/bin/config-yargs'"
+# change to use command 'webpack serve' instead of 'webpack-dev-server'
+# you may still have to run webpack before refreshing webpage to apply new js changes
+# after this step, you can use localhost:8080/[path to your html] to view your page
+```
+
 
