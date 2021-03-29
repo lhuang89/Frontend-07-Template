@@ -17,13 +17,14 @@ export class Timeline {
 
     }
 
+    /*
     set rate(){
 
     }
 
     get rate(){
 
-    }
+    }*/
 
     resume(){
 
@@ -31,4 +32,10 @@ export class Timeline {
     }
 
     reset(){}
+}
+
+export class Animation {
+    constructor(object, property, startValue, endValue, duration, timingFunction){
+
+    }
 }
