@@ -10,12 +10,16 @@ const PAUSE_TIME = Symbol('pause_time');
 
 export class Timeline {
     constructor(){
+        this.state = "Initiated";
         
         this[ANIMATIONS] = new Set();
         this[START_TIME] = new Map();
     }
 
     start(){
+        if (this.state !== "Initiated")
+            return;
+        this.state = "Started";
         let startTime = Date.now();
         this[PAUSE_TIME] = 0;
         this[TICK] = ()=>{
@@ -41,11 +45,17 @@ export class Timeline {
     }
 
     pause(){
-        this[PAUSE_START] = Date.now() - this[PAUSE_TIME]
+        if (this.state !== "Started")
+            return;
+        this.state = "Paused";
+        this[PAUSE_START] = Date.now() - this[PAUSE_TIME];
         cancelAnimationFrame(this[TICK_HANDLER]);
     }
 
     resume(){
+        if (this.state !== "Paused")
+            return;
+        this.state = "Started";
         this[PAUSE_TIME] += Date.now() - this[PAUSE_START];
         this[TICK]();
 
@@ -54,6 +64,7 @@ export class Timeline {
     reset()
     {
         this.pause();
+        this.state = "Started";
         let startTime=Date.now();
         this[PAUSE_TIME]=0;
         this[ANIMATIONS] = new Set();
