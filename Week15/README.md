@@ -17,3 +17,11 @@ let tick = ()=>{
     cancelAnimationFrame(handler);
 }
 ```
+
+# Mouse events and touch events
+## Mouse events
+- mousedown, mousemove, mouseup
+- event.buttons (5 integer values (left, right, middle button ...))
+
+## Touch events
+- touchstart, touchmove, touchcancel, touchend
