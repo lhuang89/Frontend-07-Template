@@ -184,8 +184,13 @@ export class Recognizer {
         }
     
         if (context.isPan){
-            //console.log(dx, dy);
-            //console.log("pan");
+            this.dispatcher.dispatch("pan", {
+                startX: context.clientX,
+                startY: context.clientY, 
+                clientX: point.clientX,
+                clientY: point.clientY,
+                isVertical: context.isVertical
+            })
         }
         context.points = context.points.filter(point => Date.now() - point.t < 500);
         context.points.push({
@@ -227,7 +232,7 @@ export class Dispatcher {
         for (let name in properties){
             event[name] = properties[name];
         }
-        element.dispatchEvent(event);
+        this.element.dispatchEvent(event);
         console.log(event);   
     }
 
@@ -235,6 +240,6 @@ export class Dispatcher {
 
 
 export function enableGesture(element) {
-    new Listener(new Recognizer(new Dispatcher(element)));
+    new Listener(element, new Recognizer(new Dispatcher(element)));
 
 }
