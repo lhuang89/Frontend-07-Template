@@ -94,7 +94,12 @@ export class Recognizer {
     start(point, context){
         //console.log("start", point.clientX, point.clientY);
 
-        context.startX = point.clientX, context.startY = point.clientY;     
+        context.startX = point.clientX, context.startY = point.clientY; 
+        
+        this.dispatcher.dispatch("start", {
+            clientX: point.clientX,
+            clientY: point.clientY
+        });
     
         context.points =[{t: Date.now(), x: point.clientX, y: point.clientY}];
 
@@ -115,7 +120,6 @@ export class Recognizer {
     end(point, context){
     
         if(context.isTap){
-            //console.log("tap");
             this.dispatcher.dispatch("tap", {});
             clearTimeout(context.handler);
         }
@@ -137,9 +141,9 @@ export class Recognizer {
     
         if (v > 1.5){
             context.isFlick = true;
-            this.dispatcher.dispatch("fllick", {
-                startX: context.clientX,
-                startY: context.clientY, 
+            this.dispatcher.dispatch("flick", {
+                startX: context.startX,
+                startY: context.startY, 
                 clientX: point.clientX,
                 clientY: point.clientY,
                 isVertical: context.isVertical,
@@ -153,16 +157,25 @@ export class Recognizer {
             
         if(context.isPan){
             this.dispatcher.dispatch("panend", {
-                startX: context.clientX,
-                startY: context.clientY, 
+                startX: context.startX,
+                startY: context.startY, 
                 clientX: point.clientX,
                 clientY: point.clientY,
                 isVertical: context.isVertical,
-                isFlick: context.isFlick
+                isFlick: context.isFlick,
+                velocity: v
             })
         }
-        //console.log(v);
-        //console.log("end", point.clientX, point.clientY);
+
+        this.dispatcher.dispatch("end", {
+            startX: context.startX,
+            startY: context.startY, 
+            clientX: point.clientX,
+            clientY: point.clientY,
+            isVertical: context.isVertical,
+            isFlick: context.isFlick,
+            velocity: v
+        })
     }
     
     move(point, context){
@@ -174,8 +187,8 @@ export class Recognizer {
             context.isPress = false;              
             context.isVertical = Math.abs(dx) < Math.abs(dy)
             this.dispatcher.dispatch("panstart", {
-                startX: context.clientX,
-                startY: context.clientY, 
+                startX: context.startX,
+                startY: context.startY, 
                 clientX: point.clientX,
                 clientY: point.clientY,
                 isVertical: context.isVertical
@@ -185,12 +198,12 @@ export class Recognizer {
     
         if (context.isPan){
             this.dispatcher.dispatch("pan", {
-                startX: context.clientX,
-                startY: context.clientY, 
+                startX: context.startX,
+                startY: context.startY, 
                 clientX: point.clientX,
                 clientY: point.clientY,
                 isVertical: context.isVertical
-            })
+            });
         }
         context.points = context.points.filter(point => Date.now() - point.t < 500);
         context.points.push({
@@ -198,7 +211,6 @@ export class Recognizer {
             x: point.clientX,
             y: point.clientY
         });
-        //console.log("move", point.clientX, point.clientY);
     }
     
     cancel(point, context){
@@ -209,22 +221,9 @@ export class Recognizer {
 
 }
 
-
-export function dispatch(type, properties) {
-    let event = new Event(type);
-    for (let name in properties){
-        event[name] = properties[name];
-    }
-    element.dispatchEvent(event);
-    console.log(event);
-
-}
-
-
 export class Dispatcher {
     constructor(element){
         this.element = element;
-
     }
 
     dispatch(type, properties) {
@@ -233,7 +232,6 @@ export class Dispatcher {
             event[name] = properties[name];
         }
         this.element.dispatchEvent(event);
-        console.log(event);   
     }
 
 }
@@ -241,5 +239,4 @@ export class Dispatcher {
 
 export function enableGesture(element) {
     new Listener(element, new Recognizer(new Dispatcher(element)));
-
 }
