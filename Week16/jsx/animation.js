@@ -57,7 +57,6 @@ export class Timeline {
             return;
         this.state = "Started";
         this[PAUSE_TIME] += Date.now() - this[PAUSE_START];
-        this[PAUSE_START] = 0;
         this[TICK]();
     }
 
